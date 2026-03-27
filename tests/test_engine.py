@@ -1,7 +1,6 @@
 import unittest
 from rpgnlp import engine
 
-
 class TestEngine(unittest.TestCase):
     def setUp(self):
         self.engine = engine.NLPEngine()
@@ -37,7 +36,12 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(result["subject"], "goblin")
         self.assertEqual(result["modifiers"], ["with"])
         self.assertEqual(result["instrument"], "metal rod")
-    
 
+    def test_case7(self):
+        result = self.engine.run("Go inside of the house.", debug=True)
+        self.assertEqual(result["action"], "travel")
+        self.assertEqual(result["subject"], "house")
+        self.assertEqual(result["modifiers"], ["inside"])
+    
 if __name__ == "__main__":
     unittest.main()
