@@ -31,5 +31,13 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(result["action"], "travel")
         self.assertEqual(result["direction"], "east")
 
+    def test_the_metal_rod(self):
+        result = self.engine.run("Hit the goblin over the head with a metal rod", debug=True)
+        self.assertEqual(result["action"], "attack")
+        self.assertEqual(result["subject"], "goblin")
+        self.assertEqual(result["modifiers"], ["with"])
+        self.assertEqual(result["instrument"], "metal rod")
+    
+
 if __name__ == "__main__":
     unittest.main()
