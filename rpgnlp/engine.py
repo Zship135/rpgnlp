@@ -138,8 +138,9 @@ class NLPEngine:
 
     def _get_modifiers(self, tags):
         modifiers = []
+        exceptions = ["over"]
         for tag in tags:
-            if tag[1] == "RB" or tag[1] == "IN":
+            if (tag[1] == "RB" or tag[1] == "IN") and tag[1] not in exceptions:
                 modifiers.append(tag[0])
         return modifiers
 
