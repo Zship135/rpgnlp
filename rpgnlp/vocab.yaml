@@ -1,0 +1,38 @@
+sit:
+  verbs: [sit, rest, relax, lounge, perch, take a seat, heal]
+attack:
+  verbs: [attack, hit, strike, fight, bonk, whack, punch, slice]
+light_attack:
+  verbs: [poke, jab, tap, tickle, nudge, boop, slap]
+heavy_attack:
+  verbs: [smash, crush, slam, bash, wallop, pulverize, 
+          demolish, obliterate, annihilate, devastate, 
+          wreck, ruin, destroy, maul, pummel, batter, 
+          clobber, thrash, beat, bludgeon, club, flay, 
+          skin, disembowel, eviscerate]
+travel:
+  verbs: [go, walk, run, move, travel, journey, trek, 
+          wander, roam, explore, venture, migrate, 
+          commute, head, proceed, advance, progress, 
+          navigate, traverse, cross, pass, trek, hike, 
+          march, stroll, saunter, amble, meander, enter, 
+          leave, exit, approach, retreat, flee, follow, 
+          chase, pursue, escape, evade, flee, dash, turn]  
+climb:
+  verbs: [climb, ascend, scale, mount, scramble, hike, trek, go up, rise, elevate, boost]
+pick:
+  verbs: [pick, choose, select, grab, take, snatch, pluck, gather, harvest, collect]
+sneak:
+  verbs: [sneak, creep, tiptoe, slink, skulk, lurk, prowl, slip, glide]
+put:
+  verbs: [put, place, set, drop, lay, position, arrange, stack, pile]
+look:
+  verbs: [look, examine, inspect, observe, scrutinize, check, survey, scan, peer, gaze]
+insult:
+  verbs: [insult, taunt, mock, ridicule, jeer, deride, belittle, disparage, scorn, sneer]
+scream:
+  verbs: [scream, yell, shout, shriek, howl, wail, bellow, roar, screech]
+talk:
+  verbs: [talk, speak, chat, converse, say, ask, tell, greet, hello, listen]
+open:
+  verbs: [open, unlock, unseal, unbar, unfasten, unbolt, unchain, unshackle]
