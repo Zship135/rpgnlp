@@ -80,7 +80,6 @@ class NLPEngine:
                         if tags[j][1] == "NN" and tags[j][0].lower() in self._manner_words:
                             j += 1
                             continue
-                        # Collect adjectives and nouns as a compound instrument
                         parts = [tags[j][0]]
                         found_noun = tags[j][1] == "NN"
                         while j+1 < len(tags) and tags[j+1][1] in ("JJ", "NN"):
@@ -110,7 +109,6 @@ class NLPEngine:
         for canon, synonyms in self.canon.items():
             if verb in synonyms:
                 return canon
-        # Always use semantic similarity for best guess
         nlp = get_nlp()
         verb_doc = nlp(verb)
         best_score = -1
@@ -222,7 +220,6 @@ class NLPEngine:
             i = tokens.index("and")
             left = tokens[:i]
             right = tokens[i+1:]
-            # Only split if the right side contains a verb (i.e. it's a separate action)
             if not self._has_verb(right):
                 return [tokens[:i] + tokens[i+1:]]
             results = []
