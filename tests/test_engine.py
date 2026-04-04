@@ -146,7 +146,7 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(result["action"], "heavy_attack")
         self.assertEqual(result["subject"], "red door")
         self.assertEqual(result["direction"], "")
-        self.assertEqual(result["instrument"], ["hammer"])
+        self.assertEqual(result["instrument"], [{"name": "hammer", "quantity": 1}])
         self.assertEqual(result["modifiers"], [])
         self.assertEqual(result["topic"], "")
 
@@ -254,7 +254,7 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(result["action"], "attack")
         self.assertEqual(result["subject"], "orc")
         self.assertEqual(result["direction"], "")
-        self.assertEqual(result["instrument"], ["sword"])
+        self.assertEqual(result["instrument"], [{"name": "sword", "quantity": 1}])
         self.assertEqual(result["modifiers"], ["furiously"])
         self.assertEqual(result["topic"], "")
 
@@ -308,7 +308,8 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(result["action"], "attack")
         self.assertEqual(result["subject"], "troll")
         self.assertEqual(result["direction"], "")
-        self.assertEqual(result["instrument"], ["sword", "shield"])
+        self.assertEqual(result["instrument"], [{"name": "sword", "quantity": 1}, 
+                                                {"name": "shield", "quantity": 1}])
         self.assertEqual(result["modifiers"], [])
         self.assertEqual(result["topic"], "")
 
@@ -317,7 +318,7 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(result["action"], "heavy_attack")
         self.assertEqual(result["subject"], "door")
         self.assertEqual(result["direction"], "")
-        self.assertEqual(result["instrument"], ["hammer"])
+        self.assertEqual(result["instrument"], [{"name": "hammer", "quantity": 1}])
         self.assertEqual(result["modifiers"], ["rage"])
         self.assertEqual(result["topic"], "")
 
@@ -326,7 +327,8 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(result["action"], "attack")
         self.assertEqual(result["subject"], "dragon")
         self.assertEqual(result["direction"], "")
-        self.assertEqual(result["instrument"], ["sword", "bow"])
+        self.assertEqual(result["instrument"], [{"name": "sword", "quantity": 1}, 
+                                                {"name": "bow", "quantity": 1}])
         self.assertEqual(result["modifiers"], [])
         self.assertEqual(result["topic"], "")
 
@@ -335,7 +337,7 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(result["action"], "heavy_attack")
         self.assertEqual(result["subject"], "gate")
         self.assertEqual(result["direction"], "")
-        self.assertEqual(result["instrument"], ["mace"])
+        self.assertEqual(result["instrument"], [{"name": "mace", "quantity": 1}])
         self.assertEqual(result["modifiers"], ["fury"])
         self.assertEqual(result["topic"], "")
 
@@ -344,7 +346,9 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(result["action"], "attack")
         self.assertEqual(result["subject"], "ogre")
         self.assertEqual(result["direction"], "")
-        self.assertEqual(result["instrument"], ["sword", "shield", "torch"])
+        self.assertEqual(result["instrument"], [{"name": "sword", "quantity": 1}, 
+                                                {"name": "shield", "quantity": 1}, 
+                                                {"name": "torch", "quantity": 1}])
         self.assertEqual(result["modifiers"], [])
         self.assertEqual(result["topic"], "")
 
@@ -353,7 +357,7 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(result["action"], "heavy_attack")
         self.assertEqual(result["subject"], "door")
         self.assertEqual(result["direction"], "")
-        self.assertEqual(result["instrument"], ["hammer"])
+        self.assertEqual(result["instrument"], [{"name": "hammer", "quantity": 1}])
         self.assertEqual(result["modifiers"], ["rage"])
         self.assertEqual(result["topic"], "")
 
@@ -362,10 +366,103 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(result["action"], "attack")
         self.assertEqual(result["subject"], "orc")
         self.assertEqual(result["direction"], "")
-        self.assertEqual(result["instrument"], ["heavy iron mace", "sharp dagger"])
+        self.assertEqual(result["instrument"], [{"name": "heavy iron mace", "quantity": 1}, {"name": "sharp dagger", "quantity": 1}])
         self.assertEqual(result["modifiers"], [])
         self.assertEqual(result["topic"], "")
 
+    def test_case41(self):
+        result = self.engine.run("attack the goblin with two sharp daggers and a heavy shield", debug=True)
+        self.assertEqual(result["action"], "attack")
+        self.assertEqual(result["subject"], "goblin")
+        self.assertEqual(result["direction"], "")
+        self.assertEqual(result["instrument"], [{"name": "sharp daggers", "quantity": 2}, 
+                                                {"name": "heavy shield", "quantity": 1}])
+        self.assertEqual(result["modifiers"], [])
+        self.assertEqual(result["topic"], "")
+
+    def test_case42(self):
+        result = self.engine.run("attack the goblin with 2 sharp daggers", debug=True)
+        self.assertEqual(result["action"], "attack")
+        self.assertEqual(result["subject"], "goblin")
+        self.assertEqual(result["direction"], "")
+        self.assertEqual(result["instrument"], [{"name": "sharp daggers", "quantity": 2}])
+        self.assertEqual(result["modifiers"], [])
+        self.assertEqual(result["topic"], "")
+
+    def test_case43(self):
+        result = self.engine.run("attack the skeleton with three rusty swords and one torch", debug=True)
+        self.assertEqual(result["action"], "attack")
+        self.assertEqual(result["subject"], "skeleton")
+        self.assertEqual(result["direction"], "")
+        self.assertEqual(result["instrument"], [{"name": "rusty swords", "quantity": 3}, 
+                                                {"name": "torch", "quantity": 1}])
+        self.assertEqual(result["modifiers"], [])
+        self.assertEqual(result["topic"], "")
+
+    def test_case44(self):
+        result = self.engine.run("attack the troll with 2 clubs and five axes", debug=True)
+        self.assertEqual(result["action"], "attack")
+        self.assertEqual(result["subject"], "troll")
+        self.assertEqual(result["direction"], "")
+        self.assertEqual(result["instrument"], [{"name": "clubs", "quantity": 2}, 
+                                                {"name": "axes", "quantity": 5}])
+        self.assertEqual(result["modifiers"], [])
+        self.assertEqual(result["topic"], "")
+
+    def test_case45(self):
+        result = self.engine.run("attack the goblin with daggers and shields", debug=True)
+        self.assertEqual(result["action"], "attack")
+        self.assertEqual(result["subject"], "goblin")
+        self.assertEqual(result["direction"], "")
+        self.assertEqual(result["instrument"], [{"name": "daggers", "quantity": 1}, 
+                                                {"name": "shields", "quantity": 1}])
+        self.assertEqual(result["modifiers"], [])
+        self.assertEqual(result["topic"], "")
+
+    def test_case46(self):
+        result = self.engine.run("attack the goblin with twelve daggers", debug=True)
+        self.assertEqual(result["action"], "attack")
+        self.assertEqual(result["subject"], "goblin")
+        self.assertEqual(result["direction"], "")
+        self.assertEqual(result["instrument"], [{"name": "daggers", "quantity": 12}])
+        self.assertEqual(result["modifiers"], [])
+        self.assertEqual(result["topic"], "")
+
+    def test_case47(self):
+        result = self.engine.run("attack the goblin with zero daggers", debug=True)
+        self.assertEqual(result["action"], "attack")
+        self.assertEqual(result["subject"], "goblin")
+        self.assertEqual(result["direction"], "")
+        self.assertEqual(result["instrument"], [{"name": "daggers", "quantity": 0}])
+        self.assertEqual(result["modifiers"], [])
+        self.assertEqual(result["topic"], "")
+
+    def test_case48(self):
+        result = self.engine.run("attack the orc with the sword very quickly and silently", debug=True)
+        self.assertEqual(result["action"], "attack")
+        self.assertEqual(result["subject"], "orc")
+        self.assertEqual(result["direction"], "")
+        self.assertEqual(result["instrument"], [{"name": "sword", "quantity": 1}])
+        self.assertEqual(result["modifiers"], ["quickly", "silently"])
+        self.assertEqual(result["topic"], "")
+
+    def test_case49(self):
+        result = self.engine.run("attack with a dozen arrows", debug=True)
+        self.assertEqual(result["action"], "attack")
+        self.assertEqual(result["subject"], "")
+        self.assertEqual(result["direction"], "")
+        self.assertEqual(result["instrument"], [{"name": "arrows", "quantity": 12}])
+        self.assertEqual(result["modifiers"], [])
+        self.assertEqual(result["topic"], "")
+
+    def test_case50(self):
+        result = self.engine.run("attack furiously", debug=True)
+        self.assertEqual(result["action"], "attack")
+        self.assertEqual(result["subject"], "")
+        self.assertEqual(result["direction"], "")
+        self.assertEqual(result["instrument"], [])
+        self.assertEqual(result["modifiers"], ["furiously"])
+        self.assertEqual(result["topic"], "")
 
 
 if __name__ == "__main__":

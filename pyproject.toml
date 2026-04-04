@@ -5,17 +5,29 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "rpgnlp"
 version = "0.1.0"
-description = "A package for RPG NLP tasks."
+description = "A natural language parser for RPG text commands. Extracts actions, subjects, directions, instruments, modifiers, and topics from player input."
 authors = [
-    { name = "Your Name", email = "your.email@example.com" }
+    { name = "zship135" }
 ]
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.9"
+license = {text = "MIT"}
 classifiers = [
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent"
+    "Operating System :: OS Independent",
+    "Topic :: Games/Entertainment :: Role-Playing",
+    "Topic :: Text Processing :: Linguistic"
+]
+dependencies = [
+    "nltk>=3.8",
+    "spacy>=3.5",
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/rpgnlp"
+Homepage = "https://github.com/zship135/rpgnlp"
+

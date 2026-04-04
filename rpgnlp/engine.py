@@ -1,13 +1,6 @@
 
-import os
-import sys
 from nltk.tokenize import word_tokenize
-from nltk.corpus import brown
-import string
 from nltk.tag import pos_tag
-import yaml
-from rapidfuzz import process
-import json
 import random
 import spacy
 
@@ -22,16 +15,96 @@ def get_nlp():
 class NLPEngine:
     def __init__(self):
         self.canon = {
-            "attack": ["attack", "hit", "strike", "fight", "bonk", "whack", "punch", "slice", "slime"],
-            "search": ["search", "scavenge", "track"],
-            "heavy_attack": ["smash", "crush", "slam", "bash", "wallop", "pulverize", 
-                            "demolish", "obliterate", "annihilate", "devastate", 
-                            "wreck", "ruin", "destroy", "maul", "pummel", "batter", 
-                            "clobber", "thrash", "beat", "bludgeon", "club", "flay", 
-                            "skin", "disembowel", "eviscerate", "demolish"],
-            "travel": ["travel", "go", "journey", "run"],
-            "speak": ["speak", "talk", "utter", "converse", "tell", "articulate"],
-            "inspect": ["inspect", "look"]
+            "attack": [
+                "attack", "hit", "strike", "fight", "punch", "slice", "slime", "stab", "slash",
+                "shoot", "kick", "bite", "claw", "jab", "swing", "lunge", "pierce",
+                "cleave", "chop", "hack", "cut", "slay", "kill", "impale", "charge",
+                "rush", "assault", "duel", "dispatch", "wound", "injure",
+            ],
+            "light_attack": [
+                "poke", "prod", "tap", "flick", "nudge", "graze", "slap", "swat",
+                "nip", "pinch", "scratch", "nick", "sting",
+            ],
+            "heavy_attack": [
+                "smash", "crush", "slam", "bash", "wallop", "pulverize", "demolish",
+                "obliterate", "annihilate", "devastate", "wreck", "destroy", "maul",
+                "pummel", "batter", "clobber", "thrash", "bludgeon", "flay",
+                "disembowel", "eviscerate", "shatter", "splinter", "stomp", "trample",
+                "flatten", "sunder", "shred", "tear", "rend", "ravage", "mangle",
+            ],
+            "search": [
+                "search", "scavenge", "track", "hunt", "forage", "rummage", "scout",
+                "investigate", "probe", "survey", "scan", "sift", "dig", "delve",
+                "uncover", "find", "locate", "seek", "patrol", "reconnoiter",
+            ],
+            "travel": [
+                "travel", "go", "journey", "run", "walk", "move", "head", "sprint",
+                "dash", "flee", "retreat", "advance", "march", "climb", "crawl",
+                "swim", "fly", "leap", "jump", "enter", "exit", "leave", "return",
+                "approach", "follow", "proceed", "venture", "roam", "wander", "trek",
+                "traverse", "cross", "navigate", "descend", "ascend", "scale", "hike",
+                "amble", "saunter", "stride", "stroll", "meander",
+            ],
+            "speak": [
+                "speak", "talk", "converse", "tell", "articulate", "say", "ask",
+                "whisper", "shout", "yell", "scream", "plead", "beg", "greet", "hail",
+                "call", "demand", "command", "request", "question", "answer", "reply",
+                "respond", "chat", "negotiate", "persuade", "taunt", "announce",
+                "declare", "proclaim", "inform", "explain", "describe", "narrate",
+                "recite", "address", "lecture", "debate", "argue", "discuss", "mock",
+                "insult", "flatter", "praise", "apologize", "confess", "warn",
+                "threaten", "order", "instruct", "advise", "suggest", "propose",
+                "invite",
+            ],
+            "inspect": [
+                "inspect", "look", "examine", "observe", "study", "check", "peer",
+                "gaze", "glance", "read", "analyze", "appraise", "identify", "perceive",
+                "watch", "view", "review", "assess", "evaluate", "sample", "taste",
+                "smell", "sniff", "listen", "sense", "spot", "notice", "discern",
+                "detect",
+            ],
+            "defend": [
+                "block", "parry", "dodge", "evade", "deflect", "guard", "protect",
+                "brace", "resist", "counter", "cover", "ward", "repel", "absorb",
+                "withstand", "fortify", "barricade", "intercept", "fend",
+            ],
+            "use": [
+                "use", "activate", "apply", "employ", "consume", "drink", "eat",
+                "wield", "equip", "wear", "light", "ignite", "open", "close", "unlock",
+                "lock", "pull", "push", "turn", "flip", "press", "trigger", "operate",
+                "manipulate", "handle", "deploy", "utilize",
+            ],
+            "take": [
+                "take", "grab", "pick", "collect", "gather", "loot", "steal", "snatch",
+                "seize", "claim", "acquire", "pocket", "obtain", "procure", "get",
+                "fetch", "retrieve", "receive", "capture", "catch", "nab", "pilfer",
+                "plunder", "ransack", "pillage", "commandeer", "confiscate",
+            ],
+            "drop": [
+                "drop", "discard", "release", "abandon", "place", "put", "set",
+                "deposit", "store", "stash", "forsake", "forfeit", "yield",
+                "surrender", "relinquish", "give", "deliver", "toss",
+            ],
+            "cast": [
+                "cast", "conjure", "summon", "invoke", "enchant", "hex", "curse",
+                "bless", "heal", "cure", "resurrect", "banish", "dispel", "channel",
+                "charm", "bewitch", "incant", "chant", "recite", "intone",
+            ],
+            "sneak": [
+                "sneak", "creep", "lurk", "hide", "stalk", "skulk", "tiptoe",
+                "shadow", "vanish", "disappear", "cloak", "camouflage", "prowl",
+                "sidle", "skulk",
+            ],
+            "rest": [
+                "rest", "sleep", "camp", "meditate", "recover", "nap", "sit", "wait",
+                "pause", "doze", "slumber", "repose", "lounge", "relax", "unwind",
+                "halt", "stop", "stay", "remain", "hibernate", "linger", "tarry",
+            ],
+            "trade": [
+                "trade", "buy", "sell", "barter", "exchange", "haggle", "offer",
+                "purchase", "shop", "deal", "bargain", "swap", "peddle", "auction",
+                "bid", "vend", "hawk", "market",
+            ],
         }
 
     def _assemble_canon(self, action, subject, direction, instrument, modifiers, topic):
@@ -55,13 +128,19 @@ class NLPEngine:
                         return topic
         return topic
 
+    _degree_adverbs = {"very", "really", "extremely", "quite", "rather",
+                       "incredibly", "terribly", "awfully", "exceptionally",
+                       "remarkably", "so", "too", "most"}
+
     def _get_modifiers(self, tags, action=None):
         modifiers = []
         after_with = False
-        for tag in tags:
+        for i, tag in enumerate(tags):
             if tag[0].lower() == "with" and tag[1] == "IN":
                 after_with = True
             elif tag[1] == "RB":
+                if tag[0].lower() in self._degree_adverbs:
+                    continue
                 modifiers.append(tag[0])
             elif after_with and tag[1] in ("NN", "NNS") and tag[0].lower() in self._manner_words:
                 modifiers.append(tag[0])
@@ -70,27 +149,55 @@ class NLPEngine:
     _manner_words = {"haste", "caution", "care", "stealth", "fury", "rage",
                       "speed", "force", "grace", "precision", "vigor", "ease"}
 
+    _number_words = {
+        "zero": 0, "dozen": 12,
+        "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
+        "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+        "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15,
+        "sixteen": 16, "seventeen": 17, "eighteen": 18, "nineteen": 19, "twenty": 20,
+    }
+
+    def _parse_quantity(self, word):
+        '''Parse a quantity word or number string into an integer, or return None'''
+        low = word.lower()
+        if low in self._number_words:
+            return self._number_words[low]
+        try:
+            return int(word)
+        except ValueError:
+            return None
+
     def _get_instrument(self, tags, action=None):
         instruments = []
         for i in range(0, len(tags)):
             if tags[i][0] == "with":
                 j = i + 1
                 while j < len(tags):
-                    if tags[j][1] in ("JJ", "NN"):
-                        if tags[j][1] == "NN" and tags[j][0].lower() in self._manner_words:
+                    quantity = 1
+                    if tags[j][1] == "CD" or (tags[j][1] in ("NN", "NNS") and self._parse_quantity(tags[j][0]) is not None):
+                        parsed = self._parse_quantity(tags[j][0])
+                        if parsed is not None:
+                            quantity = parsed
+                        j += 1
+                        if j >= len(tags):
+                            break
+                    if tags[j][1] in ("JJ", "NN", "NNS"):
+                        if tags[j][1] in ("NN", "NNS") and tags[j][0].lower() in self._manner_words:
                             j += 1
                             continue
                         parts = [tags[j][0]]
-                        found_noun = tags[j][1] == "NN"
-                        while j+1 < len(tags) and tags[j+1][1] in ("JJ", "NN"):
-                            if tags[j+1][1] == "NN" and tags[j+1][0].lower() in self._manner_words:
+                        found_noun = tags[j][1] in ("NN", "NNS")
+                        while j+1 < len(tags) and tags[j+1][1] in ("JJ", "NN", "NNS"):
+                            if tags[j+1][1] in ("NN", "NNS") and tags[j+1][0].lower() in self._manner_words:
+                                break
+                            if found_noun and tags[j+1][1] == "NNS":
                                 break
                             parts.append(tags[j+1][0])
-                            if tags[j+1][1] == "NN":
+                            if tags[j+1][1] in ("NN", "NNS"):
                                 found_noun = True
                             j += 1
                         if found_noun:
-                            instruments.append(" ".join(parts))
+                            instruments.append({"name": " ".join(parts), "quantity": quantity})
                     j += 1
                 return instruments
         return instruments
@@ -105,7 +212,6 @@ class NLPEngine:
     
     def _get_canon(self, verb):
         verb = verb.lower()
-        # Exact match
         for canon, synonyms in self.canon.items():
             if verb in synonyms:
                 return canon
@@ -215,20 +321,21 @@ class NLPEngine:
         return any(t.lower() in canon_verbs for t in tokens)
 
     def _get_compound_actions(self, tokens: list[str]) -> list[list[str]]:
-        # Handle 'and' and 'or' as split points, but 'or' is random
-        if "and" in tokens:
-            i = tokens.index("and")
-            left = tokens[:i]
-            right = tokens[i+1:]
-            if not self._has_verb(right):
-                return [tokens[:i] + tokens[i+1:]]
-            results = []
-            if left:
-                results.extend(self._get_compound_actions(left))
-            if right:
-                results.extend(self._get_compound_actions(right))
-            return results
-        elif "or" in tokens:
+        # Handle 'and', 'then', and 'or' as split points, but 'or' is random
+        for keyword in ("and", "then"):
+            if keyword in tokens:
+                i = tokens.index(keyword)
+                left = tokens[:i]
+                right = tokens[i+1:]
+                if not self._has_verb(right):
+                    return [tokens[:i] + tokens[i+1:]]
+                results = []
+                if left:
+                    results.extend(self._get_compound_actions(left))
+                if right:
+                    results.extend(self._get_compound_actions(right))
+                return results
+        if "or" in tokens:
             i = tokens.index("or")
             left = tokens[:i]
             right = tokens[i+1:]
