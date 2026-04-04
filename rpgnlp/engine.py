@@ -5,15 +5,34 @@ import random
 import spacy
 
 _NLP = None
+_NLTK_READY = False
+
+def _ensure_nltk_data():
+    global _NLTK_READY
+    if _NLTK_READY:
+        return
+    import nltk
+    for resource in ('averaged_perceptron_tagger_eng', 'punkt_tab'):
+        try:
+            nltk.data.find(f'taggers/{resource}' if 'tagger' in resource else f'tokenizers/{resource}')
+        except LookupError:
+            nltk.download(resource, quiet=True)
+    _NLTK_READY = True
 
 def get_nlp():
     global _NLP
     if _NLP is None:
-        _NLP = spacy.load("en_core_web_md")
+        try:
+            _NLP = spacy.load("en_core_web_md")
+        except OSError:
+            from spacy.cli import download
+            download("en_core_web_md")
+            _NLP = spacy.load("en_core_web_md")
     return _NLP
 
 class NLPEngine:
     def __init__(self):
+        _ensure_nltk_data()
         self.canon = {
             "attack": [
                 "attack", "hit", "strike", "fight", "punch", "slice", "slime", "stab", "slash",

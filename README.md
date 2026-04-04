@@ -8,19 +8,7 @@ A natural language parser for RPG text commands. Extracts structured data — ac
 pip install rpgnlp
 ```
 
-After installing, download the required spaCy language model:
-
-```bash
-python -m spacy download en_core_web_md
-```
-
-You also need the NLTK tokenizer data (downloaded automatically on first use, or manually):
-
-```python
-import nltk
-nltk.download('averaged_perceptron_tagger_eng')
-nltk.download('punkt_tab')
-```
+On first use, the required spaCy language model (`en_core_web_md`) and NLTK data (`averaged_perceptron_tagger_eng`, `punkt_tab`) will be downloaded automatically if not already present.
 
 ## Quick Start
 
@@ -52,7 +40,7 @@ print(result)
 | `modifiers` | `list[str]` | Adverbs or manner words (e.g., `"quickly"`, `"haste"`) |
 | `topic` | `str` | Conversation topic after "about" (e.g., `"plan"`) |
 
-## Supported Actions
+## Some Supported Actions
 
 | Action | Examples |
 |---|---|
